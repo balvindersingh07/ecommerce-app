@@ -1,10 +1,12 @@
-// src/features/cart/cartSlice.js
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const storedCart = localStorage.getItem('cartItems');
 const initialState = {
   cartItems: storedCart ? JSON.parse(storedCart) : [],
+};
+
+const updateLocalStorage = (cartItems) => {
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
 };
 
 const cartSlice = createSlice({
@@ -21,17 +23,17 @@ const cartSlice = createSlice({
         state.cartItems.push({ ...item, quantity: 1 });
       }
 
-      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+      updateLocalStorage(state.cartItems);
     },
 
     removeFromCart(state, action) {
       state.cartItems = state.cartItems.filter(i => i.id !== action.payload);
-      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+      updateLocalStorage(state.cartItems);
     },
 
     clearCart(state) {
       state.cartItems = [];
-      localStorage.setItem('cartItems', JSON.stringify([]));
+      updateLocalStorage([]);
     },
 
     updateQuantity(state, action) {
@@ -40,7 +42,25 @@ const cartSlice = createSlice({
 
       if (item && quantity > 0) {
         item.quantity = quantity;
-        localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+        updateLocalStorage(state.cartItems);
+      }
+    },
+
+    // ✅ Decrease quantity
+    decreaseQuantity(state, action) {
+      const item = state.cartItems.find(i => i.id === action.payload);
+      if (item && item.quantity > 1) {
+        item.quantity -= 1;
+        updateLocalStorage(state.cartItems);
+      }
+    },
+
+    // ✅ Increase quantity (NEW)
+    increaseQuantity(state, action) {
+      const item = state.cartItems.find(i => i.id === action.payload);
+      if (item) {
+        item.quantity += 1;
+        updateLocalStorage(state.cartItems);
       }
     },
   },
@@ -51,6 +71,8 @@ export const {
   removeFromCart,
   clearCart,
   updateQuantity,
+  decreaseQuantity,
+  increaseQuantity, // ✅ Now exported
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

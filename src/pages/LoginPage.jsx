@@ -1,58 +1,95 @@
-// src/pages/LoginPage.jsx
-
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simulated login logic (replace with real auth later)
-    const fakeToken = '1234567890abcdef';
-    localStorage.setItem('authToken', fakeToken);
+    // 🔐 demo auth: check saved users, else allow any email/pass for now
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
 
-    toast.success('Logged in successfully!');
-
-    navigate('/'); // redirect to homepage
+    if (user && user.password === password) {
+      localStorage.setItem("currentUser", JSON.stringify({ name: user.name, email: user.email }));
+      localStorage.setItem("authToken", "demo-token");
+      toast.success("Logged in!");
+      navigate("/");
+    } else if (users.length === 0) {
+      // if no signup used yet, allow simple login for demo
+      localStorage.setItem("currentUser", JSON.stringify({ name: "Guest", email }));
+      localStorage.setItem("authToken", "demo-token");
+      toast.info("Demo login");
+      navigate("/");
+    } else {
+      toast.error("Invalid credentials");
+    }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+    <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="bg-white border rounded-2xl shadow-sm p-8 md:p-10">
+        <h1 className="text-3xl font-extrabold tracking-tight mb-8">Sign in</h1>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email" className="block mb-1 font-medium">Email</label>
-          <input
-            id="email"
-            type="email"
-            className="w-full border px-3 py-2 rounded"
-            placeholder="you@example.com"
-            required
-          />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+              className="w-full h-11 rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 px-3 outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <div className="flex">
+              <input
+                type={show ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="w-full h-11 rounded-l-lg border border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 px-3 outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShow((s) => !s)}
+                className="px-3 h-11 rounded-r-lg border border-l-0 border-gray-300 text-gray-600 hover:bg-gray-50"
+              >
+                {show ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full h-11 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-semibold transition"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <div className="flex items-center justify-between mt-4 text-sm">
+          <Link to="#" className="text-primary-700 hover:underline">
+            Forgot password?
+          </Link>
+          <span className="text-gray-500">
+            New here?{" "}
+            <Link to="/signup" className="text-primary-700 hover:underline">
+              Create an account
+            </Link>
+          </span>
         </div>
-
-        <div>
-          <label htmlFor="password" className="block mb-1 font-medium">Password</label>
-          <input
-            id="password"
-            type="password"
-            className="w-full border px-3 py-2 rounded"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Log In
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

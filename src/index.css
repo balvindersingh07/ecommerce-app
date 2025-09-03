@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Base tweaks */
+@layer base {
+  html, body, #root {
+    height: 100%;
+    @apply text-gray-700 bg-white;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+
+  /* unified focus ring in primary color */
+  :is(button, a, input, select, textarea):focus-visible {
+    @apply outline-none ring-2 ring-primary-300/60;
+  }
+}
+
+/* Small component helpers */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700;
+  }
+  .btn-outline {
+    @apply border border-primary-300 text-primary-700 hover:bg-primary-50;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-primary-100 text-primary-700;
+  }
+}
