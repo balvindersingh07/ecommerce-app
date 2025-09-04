@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import Hero from "../components/Hero.jsx";
 import PolicyStrip from "../components/PolicyStrip.jsx";
 import ProductCard from "../components/ProductCard.jsx";
+import ParallaxBanner from "../components/ParallaxBanner.jsx";
+import Carousel from "../components/Carousel.jsx";
 import { add as addToCart } from "../redux/cartSlice";
 import { toggle as toggleWish } from "../redux/wishlistSlice";
 import { Link } from "react-router-dom";
@@ -26,9 +28,7 @@ export default function Dashboard() {
         }
       })
       .catch(() => mounted && setLoading(false));
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   const onAddToCart = (p) =>
@@ -53,10 +53,52 @@ export default function Dashboard() {
 
   return (
     <>
+      {/* Keep existing hero if you like */}
       <Hero />
+
+      {/* Parallax banner — uses public/logo3.png and tall height */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <ParallaxBanner imageUrl="/logo3.png" height={"70vh"}>
+          <div className="text-center">
+            <h2 className="text-3xl md:text-5xl font-bold">Big Season Sale</h2>
+            <p className="text-sm md:text-lg opacity-90 mt-2">
+              Up to 15% instant savings across categories
+            </p>
+          </div>
+        </ParallaxBanner>
+      </div>
+
       <PolicyStrip />
 
+      {/* Featured carousel */}
       <section className="py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-lg font-semibold mb-3">Featured Picks</h3>
+          {loading ? (
+            <p className="text-gray-500">Loading featured…</p>
+          ) : (
+            <Carousel>
+              {items.slice(0, 10).map((p) => (
+                <div key={p.id} className="w-60">
+                  <ProductCard
+                    id={p.id}
+                    image={p.image}
+                    title={p.title}
+                    price={Math.round(p.price * 83)}
+                    rating={p?.rating?.rate}
+                    ratingCount={p?.rating?.count}
+                    onAddToCart={() => onAddToCart(p)}
+                    onAddToWish={() => onAddToWish(p)}
+                  />
+                </div>
+              ))}
+            </Carousel>
+          )}
+        </div>
+      </section>
+
+      {/* Tabbed grid */}
+      <section className="py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 mb-4">
             {["featured", "popular", "new"].map((t) => (
@@ -69,11 +111,7 @@ export default function Dashboard() {
                     : "bg-white text-gray-700 hover:bg-primary-50 border-gray-200"
                 }`}
               >
-                {t === "featured"
-                  ? "Featured"
-                  : t === "popular"
-                  ? "Popular"
-                  : "New added"}
+                {t === "featured" ? "Featured" : t === "popular" ? "Popular" : "New added"}
               </button>
             ))}
             <div className="ml-auto">
@@ -94,6 +132,8 @@ export default function Dashboard() {
                   image={p.image}
                   title={p.title}
                   price={Math.round(p.price * 83)}
+                  rating={p?.rating?.rate}
+                  ratingCount={p?.rating?.count}
                   onAddToCart={() => onAddToCart(p)}
                   onAddToWish={() => onAddToWish(p)}
                 />

@@ -25,8 +25,9 @@ export default function Footer() {
             </span>
           </Link>
           <p className="mt-4 text-gray-600 text-sm leading-relaxed">
-            Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
-            eu vulputate magna eros eu erat.
+            ShopSage is your trusted online marketplace — from electronics to fashion, we bring
+  you quality products at the best prices. Enjoy secure payments, fast delivery,
+  and hassle-free returns on every order.
           </p>
 
           <div className="mt-6 p-4 bg-white rounded-xl border shadow-sm">

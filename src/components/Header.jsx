@@ -9,8 +9,9 @@ import {
   FiSearch,
   FiMenu,
   FiAlertCircle,
+  FiX,
 } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -31,6 +32,10 @@ export default function Header() {
   const [currency, setCurrency] = useState("USD");
   const [language, setLanguage] = useState("English");
   const [q, setQ] = useState("");
+
+  // 🔎 search toggle
+  const [searchOpen, setSearchOpen] = useState(false);
+  const inputRef = useRef(null);
 
   // Auth
   const [user, setUser] = useState(null);
@@ -54,8 +59,17 @@ export default function Header() {
   // 🔎 route searches to /shop?q=
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!q.trim()) return;
+    setSearchOpen(false);
     navigate("/shop?q=" + encodeURIComponent(q));
   };
+
+  // focus input when opening search
+  useEffect(() => {
+    if (searchOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [searchOpen]);
 
   return (
     <header className="bg-white border-b">
@@ -133,7 +147,7 @@ export default function Header() {
           {/* Brand */}
           <Link
             to="/"
-            className="col-span-12 md:col-span-2 text-2xl font-extrabold tracking-tight"
+            className="col-span-8 md:col-span-2 text-2xl font-extrabold tracking-tight"
           >
             <span className="inline-flex items-center">
               <img
@@ -146,27 +160,62 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Search */}
-          <form
-            onSubmit={onSubmit}
-            className="col-span-12 md:col-span-6 order-3 md:order-none"
-          >
-            <div className="flex">
+          {/* Search (icon toggles input) */}
+          <div className="col-span-4 md:col-span-6 order-3 md:order-none flex items-center justify-end md:justify-center">
+            {/* Desktop: collapsible input */}
+            <form
+              onSubmit={onSubmit}
+              className={`hidden md:flex items-center transition-all duration-200 ${
+                searchOpen ? "w-full" : "w-12"
+              }`}
+              aria-label="site-search"
+            >
+              <button
+                type="button"
+                onClick={() => setSearchOpen((s) => !s)}
+                className={`h-12 w-12 rounded-l-xl border border-primary-200 flex items-center justify-center ${
+                  searchOpen ? "bg-primary-50" : "bg-white"
+                }`}
+                aria-label={searchOpen ? "Close search" : "Open search"}
+                title={searchOpen ? "Close search" : "Open search"}
+              >
+                {searchOpen ? <FiX /> : <FiSearch size={20} />}
+              </button>
+
               <input
+                ref={inputRef}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search product ..."
-                className="flex-1 border border-primary-200 rounded-l-xl px-4 h-12 focus:outline-none"
+                className={`h-12 border-t border-b border-primary-200 px-4 outline-none focus:ring-2 focus:ring-primary-100 ${
+                  searchOpen
+                    ? "flex-1 opacity-100"
+                    : "w-0 opacity-0 pointer-events-none"
+                }`}
               />
               <button
                 type="submit"
-                className="h-12 px-5 rounded-r-xl bg-primary-600 hover:bg-primary-700 text-white flex items-center justify-center"
+                className={`h-12 px-5 rounded-r-xl bg-primary-600 hover:bg-primary-700 text-white flex items-center justify-center ${
+                  searchOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
                 aria-label="Search"
+                title="Search"
               >
                 <FiSearch size={20} />
               </button>
-            </div>
-          </form>
+            </form>
+
+            {/* Mobile: icon opens full-width bar */}
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="md:hidden h-10 w-10 flex items-center justify-center rounded-md border"
+              aria-label="Open search"
+              title="Open search"
+            >
+              <FiSearch />
+            </button>
+          </div>
 
           {/* Wishlist / Cart */}
           <div className="col-span-12 md:col-span-4 flex items-center justify-end gap-8">
@@ -231,6 +280,38 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* Mobile search overlay */}
+      {searchOpen && (
+        <div className="md:hidden fixed inset-x-0 top-[64px] z-50 bg-white border-b shadow">
+          <form onSubmit={onSubmit} className="flex p-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(false)}
+              className="h-11 w-11 flex items-center justify-center rounded-md border"
+              aria-label="Close search"
+              title="Close search"
+            >
+              <FiX />
+            </button>
+            <input
+              ref={inputRef}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search product ..."
+              className="flex-1 h-11 border rounded-lg px-3 outline-none focus:ring-2 focus:ring-primary-100"
+            />
+            <button
+              type="submit"
+              className="h-11 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white"
+              aria-label="Search"
+              title="Search"
+            >
+              <FiSearch />
+            </button>
+          </form>
+        </div>
+      )}
     </header>
   );
 }
