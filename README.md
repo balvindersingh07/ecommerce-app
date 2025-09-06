@@ -1,14 +1,13 @@
-# E‑Commerce App
+# ShopSage — E‑Commerce App
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react\&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite\&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3-06B6D4?logo=tailwindcss\&logoColor=white)](https://tailwindcss.com)
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)](https://vercel.com)
 
-A lightweight **React + Vite** E‑Commerce front‑end with Tailwind CSS. It showcases a modern product UI, basic dashboard widgets, and a fast developer experience.
+A lightweight **React + Vite** E‑Commerce front‑end styled with **Tailwind CSS**. It features a modern storefront UI, featured-products grid, and a clean sign‑in flow.
 
 > **Live Demo:** [https://ecommerce-app-ruby-seven.vercel.app/](https://ecommerce-app-ruby-seven.vercel.app/)
-
 > **Repository:** [https://github.com/balvindersingh07/ecommerce-app](https://github.com/balvindersingh07/ecommerce-app)
 
 ---
@@ -23,7 +22,7 @@ A lightweight **React + Vite** E‑Commerce front‑end with Tailwind CSS. It sh
 * [Environment Variables](#environment-variables)
 * [Build & Deployment](#build--deployment)
 * [Screenshots](#screenshots)
-* [FAQ](#faq)
+* [Roadmap](#roadmap)
 * [Troubleshooting](#troubleshooting)
 * [Contributing](#contributing)
 * [License](#license)
@@ -35,11 +34,13 @@ A lightweight **React + Vite** E‑Commerce front‑end with Tailwind CSS. It sh
 * ⚡ **Fast dev** experience via Vite + HMR
 * 🎨 **Tailwind CSS** utility-first styling
 * 📱 **Responsive** layout (mobile → desktop)
-* 🧩 **Modular components** (cards, grids, navbar, etc.)
-* 🔍 Optional **search/filter** UI for products (edit to match your build)
-* 🧮 **Dashboard widgets** (orders, revenue, customers — add/adjust as needed)
+* 🧩 **Modular components** (cards, grids, navbar, badges)
+* 🛒 **Product cards** with price, discount badges, rating, wishlist & cart CTAs
+* 🧭 **Header UX** with currency & language selectors
+* 🔐 **Auth UI**: Sign‑in form with show/hide password
+* 🧮 Optional **dashboard widgets** (orders, revenue, customers — extend as needed)
 
-> Tip: If you extend the app (cart, auth, checkout), document those features here.
+> Tip: If you add cart/checkout, product details, or backend APIs, list them here.
 
 ---
 
@@ -55,25 +56,25 @@ A lightweight **React + Vite** E‑Commerce front‑end with Tailwind CSS. It sh
 
 ## Project Structure
 
-> This is a suggested overview. Adjust the folders to reflect your repo.
+> Adjust if your repo layout differs.
 
 ```
- ecommerce-app/
- ├─ public/
- ├─ src/
- │  ├─ assets/            # images, icons
- │  ├─ components/        # reusable UI components
- │  ├─ pages/             # route-level components (if using routing)
- │  ├─ data/              # mock/static data (if any)
- │  ├─ hooks/             # custom hooks (optional)
- │  ├─ App.jsx
- │  └─ main.jsx
- ├─ index.html
- ├─ package.json
- ├─ postcss.config.cjs
- ├─ tailwind.config.js
- ├─ vite.config.js
- └─ README.md
+ecommerce-app/
+├─ public/
+├─ src/
+│  ├─ assets/            # images, icons
+│  ├─ components/        # reusable UI components
+│  ├─ pages/             # route-level components (if using routing)
+│  ├─ data/              # mock/static data (if any)
+│  ├─ hooks/             # custom hooks (optional)
+│  ├─ App.jsx
+│  └─ main.jsx
+├─ index.html
+├─ package.json
+├─ postcss.config.cjs
+├─ tailwind.config.js
+├─ vite.config.js
+└─ README.md
 ```
 
 ---
@@ -111,7 +112,7 @@ npm run build     # Production build to dist/
 npm run preview   # Preview the production build locally
 ```
 
-> If you add linting or testing, document the scripts here (e.g., `npm run lint`, `npm run test`).
+> If you add linting or tests, document their scripts here (e.g., `npm run lint`, `npm run test`).
 
 ---
 
@@ -127,7 +128,7 @@ This template does **not** require environment variables by default. If you inte
    ```
 3. Access in code via `import.meta.env.VITE_API_BASE_URL`.
 
-> Never commit real secrets to the repo. For public keys (e.g., Firebase config), keep them in `.env` and document what each value means.
+> Never commit secrets to the repo.
 
 ---
 
@@ -148,48 +149,34 @@ npm run preview  # serve the built app locally
 * Framework Preset: **Vite**
 * Configure any environment variables under *Project Settings → Environment Variables*.
 
-> After deployment, update the **Live Demo** link at the top if your domain changes.
+After deployment, update the **Live Demo** link above if your domain changes.
 
 ---
 
 ## Screenshots
 
-Add screenshots or a short GIF here to help reviewers.
+> The images below live in `./screenshots/` inside this repo.
 
-```
-/screenhots
- ├─ home.png
- ├─ products.png
- └─ dashboard.png
-```
-
-In Markdown:
-
-```md
-![Home](./screenshots/home.png)
-![Products](./screenshots/products.png)
-```
+![Homepage – ShopSage](./screenshots/homepage.png)
+![Sign‑in page – ShopSage](./screenshots/signin.png)
 
 ---
 
-## FAQ
+## Roadmap
 
-**Q: Where is the backend?**
-A: This repository focuses on the **front‑end**. You can connect to any REST/GraphQL API or use mock JSON for demo.
-
-**Q: Can I use TypeScript?**
-A: Yes. Create a new Vite project with the TS template or migrate gradually.
-
-**Q: How do I add routing?**
-A: Install `react-router-dom` and add `BrowserRouter` around `App`.
+* Product details page
+* Cart & checkout flow
+* Auth integration with a real backend (JWT/Firebase/Supabase)
+* Filtering, sorting & pagination for products
+* Unit/UI tests
 
 ---
 
 ## Troubleshooting
 
 * Blank screen or CSS not applied → ensure Tailwind is set up (content paths in `tailwind.config.js`, `@tailwind` directives in `index.css`).
-* Port already in use → run Vite on another port: `npm run dev -- --port 5174`.
-* 404 on refresh with client routing → configure a SPA fallback on your host (Vercel handles this by default).
+* Port already in use → start Vite on another port: `npm run dev -- --port 5174`.
+* 404 on refresh with client routing → configure a SPA fallback (Vercel handles this by default).
 
 ---
 
@@ -205,11 +192,4 @@ A: Install `react-router-dom` and add `BrowserRouter` around `App`.
 
 ## License
 
-No license file is present yet. If you’d like to open‑source this project, add a `LICENSE` (e.g., MIT) at the repo root and update this section accordingly.
-
----
-
-## Author
-
-**Balvinder Singh**
-Project repo: [https://github.com/balvindersingh07/ecommerce-app](https://github.com/balvindersingh07/ecommerce-app)
+No license file is present yet. If you’d like to open‑source this project, add a `LICENSE` (e.g., MIT) at the repo root and update this section.
