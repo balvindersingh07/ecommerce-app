@@ -153,15 +153,6 @@ After deployment, update the **Live Demo** link above if your domain changes.
 
 ---
 
-## Screenshots
-
-> The images below live in `./screenshots/` inside this repo.
-
-![Homepage – ShopSage](./screenshots/homepage.png)
-![Sign‑in page – ShopSage](./screenshots/signin.png)
-
----
-
 ## Roadmap
 
 * Product details page
